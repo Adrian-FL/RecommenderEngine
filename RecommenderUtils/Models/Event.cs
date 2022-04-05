@@ -10,9 +10,6 @@ namespace Recommender.Models
         [JsonProperty("Event")]
         public string EventType { get; set; }
         public int ItemId { get; set; }
-
         public int? TransactionId { get; set; }
-
-       
     }
 }

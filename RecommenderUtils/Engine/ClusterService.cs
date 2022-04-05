@@ -16,16 +16,17 @@ namespace RecommenderUtils.Engine
             List<UserStats> usersStats = mapReduceIndex.GroupBy(x => x.UserId).Select(x => new UserStats()
             {
                 UserId = x.Key,
-                Cluster = -1,
+                Cluster = -1, //default value
                 ItemsAddedToCart = x.FirstOrDefault(y => y.EventType == "addedtocart")?.Count ?? 0,
                 ItemsPurchased = x.FirstOrDefault(y => y.EventType == "transaction")?.Count ?? 0,
-                ItemsViewed = x.FirstOrDefault(y => y.EventType == "view")?.Count ?? 0,
+                ItemsViewed = x.FirstOrDefault(y => y.EventType == "view")?.Count ?? 0
             }).ToList();
 
             // number of clusters
             // not sure how to determine the best value
-            var kMeans = new KMeans(17);
+            var kMeans = new KMeans(17); //o clasa care vine din Accord.MachineLearning
 
+            //array de array-uri
             double[][] kMeansData = new double[usersStats.Count][];
             int index = 0;
          

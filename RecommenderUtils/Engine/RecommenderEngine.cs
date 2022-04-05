@@ -98,13 +98,17 @@ namespace RecommenderUtils.Engine
             //get all user details
             var userStats = EventsRepository.GetUserMapReduce(userId);
 
-            //get user cluster
-            int cluster = ClusterService.PredictUser(userStats);
+            //get new user cluster
+            int newCluster = ClusterService.PredictUser(userStats);
+
+            //remove user from old cluster
+            if (_userData.ContainsKey(userId) && _userData[userId].Cluster != newCluster)
+                _clusterData[_userData[userId].Cluster].Remove(userId);
 
             //update internal data
             _userData[userId] = userStats;
-            if (!_clusterData[cluster].Contains(userId))
-                _clusterData[cluster].Add(userId);
+            if (!_clusterData[newCluster].Contains(userId))
+                _clusterData[newCluster].Add(userId);
         }
     }
 }
